@@ -4,9 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { Modal } from "@/components/ui/modal";
 import { useForm } from "react-hook-form";
+import { Form, FormField, FormItem } from "../ui/form";
 const formSchema = z.object({
   name: z.string().min(1),
 });
+
 export const StoreModal = () => {
   const storeModal = useStoreModal();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -15,6 +17,10 @@ export const StoreModal = () => {
       name: "",
     },
   });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
+
   return (
     <Modal
       title="Create Store"
@@ -22,7 +28,17 @@ export const StoreModal = () => {
       isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
-      Future Create Store Form
+      <div>
+        <div className="space-y-4 py-2 pb-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField control={form.control} name="name" render={({field})=>(
+                <FormItem></FormItem>
+              )}/>
+            </form>
+          </Form>
+        </div>
+      </div>
     </Modal>
   );
 };
